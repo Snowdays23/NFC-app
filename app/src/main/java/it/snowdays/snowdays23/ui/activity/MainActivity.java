@@ -3,6 +3,7 @@ package it.snowdays.snowdays23.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -35,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mLoadingView = findViewById(R.id.dim);
+
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.toolbar_main_activity_all_participants) {
+                startActivity(new Intent(MainActivity.this, ListParticipantsActivity.class));
+            }
+            return true;
+        });
     }
 
     @Override

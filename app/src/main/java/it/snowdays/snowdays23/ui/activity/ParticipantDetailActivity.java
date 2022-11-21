@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -53,5 +55,8 @@ public class ParticipantDetailActivity extends AppCompatActivity {
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        final FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {});
     }
 }

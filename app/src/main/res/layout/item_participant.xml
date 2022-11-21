@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground"
+    android:focusable="true"
+    android:clickable="true">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_account_badge"
+        android:contentDescription="@string/cd_activity_participant_detail_badge"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_participant_full_name"
+            android:textSize="16sp"
+            android:textColor="?android:textColorPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_participant_university"
+            android:textSize="16sp"
+            android:textColor="?android:textColorTertiary"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_tag_assigned"
+        android:id="@+id/item_participant_bracelet_assigned"
+        android:contentDescription="@string/cd_item_participant_bracelet_assigned"/>
+
+</LinearLayout>

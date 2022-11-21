@@ -14,4 +14,12 @@
     <string name="cd_activity_participant_detail_vegetarian">Icona vegetariano/a</string>
     <string name="cd_activity_participant_detail_vegan">Icona vegano/a</string>
     <string name="info_part_by_uid_not_found">Nessun partecipante registrato con questo braccialetto</string>
+    <string name="cd_item_participant_bracelet_assigned">Icona dello stato di assegnazione braccialetto</string>
+    <string name="error_failed_loading_retry">Riprova</string>
+    <string name="error_failed_loading">Errore nel caricamento</string>
+    <string name="toolbar_main_activity_all_participants">Lista dei partecipanti</string>
+    <string name="activity_list_participants_title">Tutti i partecipanti</string>
+    <string name="cd_activity_participant_detail_assign_tag">Pulsante per assegnare un bracciale al partecipante selezionato</string>
+    <string name="cd_activity_main_scan_tag">Icona della scansione braccialetto</string>
+    <string name="activity_main_scan_tag">Avvicina un braccialetto per scansionarlo e accedere ai dettagli del partecipante o assegnarlo a un partecipante.</string>
 </resources>
