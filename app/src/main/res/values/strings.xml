@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">SnowDays23</string>
+    <string name="error_part_by_uid_bad_request">Richiesta fallita. Riprova più tardi.</string>
+    <string name="activity_participant_detail_title">Dettaglio partecipante</string>
+    <string name="cd_activity_participant_detail_badge">Icona del dettaglio partecipante</string>
+    <string name="activity_participant_detail_first_name">Nome</string>
+    <string name="activity_participant_detail_last_name">Cognome</string>
+    <string name="activity_participant_detail_university">Università</string>
+    <string name="activity_participant_detail_dob">Data di nascita</string>
+    <string name="activity_participant_detail_bracelet_id">ID Bracciale</string>
+    <string name="activity_participant_detail_eating_habits">Necessità alimentari</string>
+    <string name="cd_activity_participant_detail_gluten_free">Icona intolleranza al glutine</string>
+    <string name="cd_activity_participant_detail_lactose_free">Icona intolleranza al lattosio</string>
+    <string name="cd_activity_participant_detail_vegetarian">Icona vegetariano/a</string>
+    <string name="cd_activity_participant_detail_vegan">Icona vegano/a</string>
+    <string name="info_part_by_uid_not_found">Nessun partecipante registrato con questo braccialetto</string>
+</resources>
