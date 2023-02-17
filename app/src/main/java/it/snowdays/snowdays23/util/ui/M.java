@@ -1,25 +1,26 @@
-package it.snowdays.snowdays23.util;
+package it.snowdays.snowdays23.util.ui;
 
 import android.util.DisplayMetrics;
 
-import java.util.Objects;
+import it.snowdays.snowdays23.util.logic.Conditions;
+
 
 public class M {
 
     private static DisplayMetrics sDisplayMetrics;
 
     public static Float dp(float dp) {
-        Objects.requireNonNull(sDisplayMetrics);
+        Conditions.checkNotNull(sDisplayMetrics);
         return dp * sDisplayMetrics.density;
     }
 
     public static int screenWidth() {
-        Objects.requireNonNull(sDisplayMetrics);
+        Conditions.checkNotNull(sDisplayMetrics);
         return sDisplayMetrics.widthPixels;
     }
 
     public static int screenHeight() {
-        Objects.requireNonNull(sDisplayMetrics);
+        Conditions.checkNotNull(sDisplayMetrics);
         return sDisplayMetrics.heightPixels;
     }
 

@@ -1,4 +1,4 @@
-package it.snowdays.snowdays23.util;
+package it.snowdays.snowdays23.util.ui;
 
 import androidx.annotation.StringRes;
 import com.google.android.material.snackbar.Snackbar;

@@ -9,6 +9,9 @@ import java.util.Date;
 
 public class Participant implements Parcelable {
 
+    @SerializedName("id")
+    private int id;
+
     @SerializedName("first_name")
     private String firstName;
 
@@ -35,6 +38,10 @@ public class Participant implements Parcelable {
 
     @SerializedName("bracelet_id")
     private String braceletId;
+
+    public int getId() {
+        return id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -73,6 +80,7 @@ public class Participant implements Parcelable {
     }
 
     private Participant(Parcel src) {
+        this.id = src.readInt();
         this.firstName = src.readString();
         this.lastName = src.readString();
         this.username = src.readString();
@@ -86,6 +94,7 @@ public class Participant implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
         dest.writeString(this.username);

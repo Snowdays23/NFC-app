@@ -1,10 +1,5 @@
 package it.snowdays.snowdays23.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,18 +8,21 @@ import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import it.snowdays.snowdays23.R;
-import it.snowdays.snowdays23.model.Participant;
-import it.snowdays.snowdays23.service.SDRestApi;
-import it.snowdays.snowdays23.service.SnowdaysService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import it.snowdays.snowdays23.ui.fragments.EventsFragment;
+import it.snowdays.snowdays23.ui.fragments.NfcAwareFragment;
+import it.snowdays.snowdays23.ui.fragments.ScanParticipantFragment;
+import it.snowdays.snowdays23.util.platform.NfcUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,15 +34,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mLoadingView = findViewById(R.id.dim);
-
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.toolbar_main_activity_all_participants) {
-                startActivity(new Intent(MainActivity.this, ListParticipantsActivity.class));
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.activity_main_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_participants) {
+                getSupportFragmentManager().beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.frame, new ScanParticipantFragment())
+                        .commit();
+            } else if (item.getItemId() == R.id.navigation_events) {
+                getSupportFragmentManager().beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.frame, new EventsFragment())
+                        .commit();
             }
             return true;
         });
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, new ScanParticipantFragment())
+                .commit();
+    }
+
+    private NfcAwareFragment findScanningFragment() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof NfcAwareFragment && ((NfcAwareFragment) fragment).isScanning()) {
+                return (NfcAwareFragment) fragment;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -76,26 +93,14 @@ public class MainActivity extends AppCompatActivity {
                 NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
             if (id != null) {
-                String idString = toHexString(id);
+                String idString = NfcUtils.toHexString(id);
                 Log.d("onTagScanned", "id: " + idString);
-                startLoading();
-                getSnowdaysService().getParticipantByBraceletId(idString)
-                        .enqueue(new GetParticipantByUidResponseCallback());
+                final NfcAwareFragment scanning = findScanningFragment();
+                if (scanning != null) {
+                    scanning.onNfcTagScanned(idString);
+                }
             }
         }
-    }
-
-    private void startLoading() {
-        mLoadingView.setVisibility(View.VISIBLE);
-    }
-
-    private void stopLoading() {
-        mLoadingView.animate().alpha(0.f)
-                .setInterpolator(new LinearInterpolator())
-                .withEndAction(() -> {
-                    mLoadingView.setVisibility(View.GONE);
-                    mLoadingView.setAlpha(1.f);
-                }).start();
     }
 
     private NfcAdapter ensureNfcAdapter() {
@@ -103,46 +108,5 @@ public class MainActivity extends AppCompatActivity {
             mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         }
         return mNfcAdapter;
-    }
-
-    private static SnowdaysService getSnowdaysService() {
-        return SDRestApi.getSnowdaysService();
-    }
-
-    private static String toHexString(byte[] arr) {
-        final StringBuilder builder = new StringBuilder();
-        for (byte b : arr) {
-            builder.append(String.format("%02x", b)).append(":");
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.toString().replace(":", "");
-    }
-
-    private class GetParticipantByUidResponseCallback implements Callback<Participant> {
-        @Override
-        public void onResponse(@NonNull Call<Participant> call, @NonNull Response<Participant> response) {
-            stopLoading();
-            if (response.isSuccessful()) {
-                startActivity(new Intent(MainActivity.this, ParticipantDetailActivity.class)
-                        .putExtra("participant", response.body()));
-            } else if (response.code() == 404) {
-                Toast.makeText(MainActivity.this,
-                        R.string.info_part_by_uid_not_found,
-                            Toast.LENGTH_SHORT).show();
-            } else {
-
-                Toast.makeText(MainActivity.this,
-                        R.string.error_part_by_uid_bad_request,
-                            Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<Participant> call, @NonNull Throwable t) {
-            stopLoading();
-            Toast.makeText(MainActivity.this,
-                    R.string.error_part_by_uid_bad_request,
-                        Toast.LENGTH_SHORT).show();
-        }
     }
 }

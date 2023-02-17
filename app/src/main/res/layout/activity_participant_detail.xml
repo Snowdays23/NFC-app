@@ -54,11 +54,15 @@
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity_participant_detail_first_name"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textAlignment="viewEnd"
+                    android:maxEms="32"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
 
             </LinearLayout>
 
@@ -78,11 +82,15 @@
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity_participant_detail_last_name"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textAlignment="viewEnd"
+                    android:maxEms="32"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
 
             </LinearLayout>
 
@@ -102,11 +110,15 @@
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity_participant_detail_dob"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textAlignment="viewEnd"
+                    android:maxEms="32"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
 
             </LinearLayout>
 
@@ -126,11 +138,15 @@
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity_participant_detail_university"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textAlignment="viewEnd"
+                    android:maxEms="32"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
 
             </LinearLayout>
 
@@ -150,11 +166,15 @@
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity_participant_detail_bracelet_id"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textAlignment="viewEnd"
+                    android:maxEms="32"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
 
             </LinearLayout>
 

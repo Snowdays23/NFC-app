@@ -1,4 +1,4 @@
-package it.snowdays.snowdays23.util;
+package it.snowdays.snowdays23.util.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import java.io.IOException;
 
 import it.snowdays.snowdays23.R;
+
 
 public class ViewUtils {
 

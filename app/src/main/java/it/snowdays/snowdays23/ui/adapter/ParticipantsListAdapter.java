@@ -1,7 +1,7 @@
 package it.snowdays.snowdays23.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import it.snowdays.snowdays23.R;
 import it.snowdays.snowdays23.model.Participant;
-import it.snowdays.snowdays23.ui.activity.ParticipantDetailActivity;
-import it.snowdays.snowdays23.util.ViewUtils;
+import it.snowdays.snowdays23.util.ui.ViewUtils;
 
 public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsListAdapter.ViewHolder> {
 
@@ -37,23 +37,27 @@ public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsLi
         }
     }
 
-    private final List<Participant> mParticipants;
-    private Context mContext;
+    private List<Participant> participants;
+    private List<Participant> filteredParticipants;
+    private Context context;
+
+    private OnParticipantSelectedListener mSelectedListener;
 
     public ParticipantsListAdapter(final List<Participant> participants) {
-        mParticipants = new ArrayList<>(participants);
+        this.participants = new ArrayList<>(participants);
+        this.filteredParticipants = new ArrayList<>(participants);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        mContext = parent.getContext();
-        return new ViewHolder(View.inflate(mContext, R.layout.item_participant, null));
+        context = parent.getContext();
+        return new ViewHolder(View.inflate(context, R.layout.item_participant, null));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Participant participant = mParticipants.get(position);
+        final Participant participant = filteredParticipants.get(position);
         holder.mFullNameView.setText(String.format("%s %s",
                 participant.getFirstName(), participant.getLastName()));
         holder.mUniversityView.setText(participant.getUniversity().getName());
@@ -62,13 +66,38 @@ public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsLi
         } else {
             holder.mTagAssignationView.setImageResource(R.drawable.ic_tag_not_assigned);
         }
-        holder.itemView.setOnClickListener(v -> mContext.startActivity(
-                new Intent(mContext, ParticipantDetailActivity.class)
-                        .putExtra("participant", participant)));
+        holder.itemView.setOnClickListener(v -> {
+            if (mSelectedListener != null) {
+                mSelectedListener.onSelect(participant);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mParticipants.size();
+        return filteredParticipants.size();
+    }
+
+    public void setSelectedListener(OnParticipantSelectedListener listener) {
+        mSelectedListener = listener;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setSearchQuery(String query) {
+        this.filteredParticipants = new ArrayList<>();
+        query = query.trim().toLowerCase(Locale.ROOT);
+        for (final Participant participant : this.participants) {
+            if (participant.getFirstName().toLowerCase(Locale.ROOT).contains(query) ||
+                    participant.getLastName().toLowerCase(Locale.ROOT).contains(query) ||
+                        participant.getUniversity().getName().toLowerCase(Locale.ROOT).contains(query) ||
+                            participant.getEmail().toLowerCase(Locale.ROOT).contains(query)) {
+                this.filteredParticipants.add(participant);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public interface OnParticipantSelectedListener {
+        void onSelect(final Participant participant);
     }
 }
