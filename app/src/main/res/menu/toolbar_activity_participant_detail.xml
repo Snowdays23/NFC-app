@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/toolbar_activity_participant_detail"
+        android:title="@string/toolbar_activity_participant_detail_view_mode"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="always"/>
+</menu>

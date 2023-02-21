@@ -1,4 +1,4 @@
-package it.snowdays.snowdays23.ui.activity;
+package it.snowdays.snowdays23.ui.fragments;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -7,13 +7,15 @@ import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,50 +26,55 @@ import java.util.List;
 
 import it.snowdays.snowdays23.R;
 import it.snowdays.snowdays23.SDApp;
-import it.snowdays.snowdays23.model.Participant;
+import it.snowdays.snowdays23.model.PartyBeast;
 import it.snowdays.snowdays23.service.SDApiService;
 import it.snowdays.snowdays23.service.SDRestApi;
 import it.snowdays.snowdays23.service.SDTrackService;
 import it.snowdays.snowdays23.service.response.RestResponse;
-import it.snowdays.snowdays23.ui.adapter.ParticipantsListAdapter;
-import it.snowdays.snowdays23.util.platform.NfcUtils;
+import it.snowdays.snowdays23.ui.activity.ListPeopleActivity;
+import it.snowdays.snowdays23.ui.activity.LoginActivity;
+import it.snowdays.snowdays23.ui.activity.ParticipantDetailActivity;
+import it.snowdays.snowdays23.ui.activity.PartyBeastDetailActivity;
+import it.snowdays.snowdays23.ui.adapter.PartyBeastsListAdapter;
 import it.snowdays.snowdays23.util.platform.Prefs;
 import it.snowdays.snowdays23.util.ui.Snacks;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListParticipantsActivity extends AppCompatActivity
-        implements SwipeRefreshLayout.OnRefreshListener {
+public class ListPartyBeastsFragment extends NfcAwareFragment
+        implements SwipeRefreshLayout.OnRefreshListener, SearchAwareFragment  {
 
     private SwipeRefreshLayout mSwipeView;
     private View mLoadingView;
     private RecyclerView mListView;
     private View mSnackbarContainer;
 
+    private PartyBeastsListAdapter adapter;
+    private PartyBeast assignee;
+    private String targetId;
+
     private NfcAdapter mNfcAdapter;
-    private ParticipantsListAdapter adapter;
 
-    private Participant assignee;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_participants);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_list_participants, container, false);
 
-        mLoadingView = findViewById(R.id.dim);
-        mListView = findViewById(R.id.list);
-        mSnackbarContainer = findViewById(R.id.activity_list_participants);
-        mSwipeView = findViewById(R.id.activity_list_participants_inner);
+        mLoadingView = rootView.findViewById(R.id.dim);
+        mListView = rootView.findViewById(R.id.list);
+        mSnackbarContainer = rootView.findViewById(R.id.fragment_list_participants);
+        mSwipeView = rootView.findViewById(R.id.activity_list_participants_inner);
         mSwipeView.setOnRefreshListener(this);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        if ("assign".equals(getIntent().getStringExtra("mode"))) {
+        final Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        if ("assign".equals(requireActivity().getIntent().getStringExtra("mode"))) {
             toolbar.setTitle(R.string.activity_list_participants_assign_title);
         }
 
-        final SearchView searchView = findViewById(R.id.search);
+        final SearchView searchView = requireActivity().findViewById(R.id.search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -83,14 +90,52 @@ public class ListParticipantsActivity extends AppCompatActivity
             }
         });
 
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         onRefresh();
+    }
+
+    @Override
+    public void onNfcTagScanned(String id) {
+        if (assignee != null) {
+            if (targetId != null && !targetId.equals(id)) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.dialog_bracelet_uid_mismatch_title)
+                        .setMessage(R.string.dialog_bracelet_uid_mismatch_message)
+                        .setPositiveButton(R.string.OK, (dialog, which) -> dialog.dismiss())
+                        .create()
+                        .show();
+                return;
+            }
+            startLoading();
+            getSnowdaysTrackingService().assignBraceletToPartyBeast(
+                    assignee.getId(), id
+            ).enqueue(new AssignBraceletResponseCallback());
+        }
+    }
+
+    @Override
+    public boolean isScanning() {
+        return isVisible() && this.assignee != null;
     }
 
     @Override
     public void onRefresh() {
         startLoading();
-        getSnowdaysApiService().getAllParticipants()
-                .enqueue(new AllParticipantsListResponseCallback());
+        getSnowdaysApiService().getAllPartyBeasts()
+                .enqueue(new AllPartyBeastsResponseCallback());
+    }
+
+    public PartyBeastsListAdapter getAdapter() {
+        return adapter;
+    }
+
+    @Override
+    public boolean isSearching() {
+        return isVisible() && this.adapter != null;
     }
 
     private void startLoading() {
@@ -107,17 +152,25 @@ public class ListParticipantsActivity extends AppCompatActivity
                 }).start();
     }
 
-    private AlertDialog buildBraceletConfirmationDialog(final Participant participant,
+    private NfcAdapter ensureNfcAdapter() {
+        if (mNfcAdapter == null) {
+            mNfcAdapter = NfcAdapter.getDefaultAdapter(requireContext());
+        }
+        return mNfcAdapter;
+    }
+
+    private AlertDialog buildBraceletConfirmationDialog(final PartyBeast participant,
                                                         final String uid) {
         this.assignee = participant;
-        final AlertDialog dialog = new AlertDialog.Builder(this)
+        this.targetId = uid;
+        final AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(R.layout.dialog_bracelet_confirmation)
                 .create();
         dialog.setOnShowListener(dialog1 -> {
             final PendingIntent onRead = PendingIntent.getActivity(
-                    this, 0, new Intent(this, getClass())
+                    requireContext(), 0, new Intent(requireContext(), ListPeopleActivity.class)
                             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-            ensureNfcAdapter().enableForegroundDispatch(this, onRead, new IntentFilter[] {
+            ensureNfcAdapter().enableForegroundDispatch(requireActivity(), onRead, new IntentFilter[] {
                     IntentFilter.create(NfcAdapter.ACTION_TAG_DISCOVERED, "*/*"),
                     IntentFilter.create(NfcAdapter.ACTION_TECH_DISCOVERED, "*/*"),
                     IntentFilter.create(NfcAdapter.ACTION_NDEF_DISCOVERED, "*/*")
@@ -125,32 +178,11 @@ public class ListParticipantsActivity extends AppCompatActivity
                     new String[] { MifareUltralight.class.getName() }
             });
         });
-        dialog.setOnDismissListener(dialog1 -> ensureNfcAdapter().disableForegroundDispatch(this));
+        dialog.setOnDismissListener(dialog1 -> {
+            ensureNfcAdapter().disableForegroundDispatch(requireActivity());
+            ListPartyBeastsFragment.this.assignee = null;
+        });
         return dialog;
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()) ||
-                NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-            byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-            if (id != null && assignee != null) {
-                String idString = NfcUtils.toHexString(id);
-                Log.d("onTagScanned", "id: " + idString);
-                startLoading();
-                getSnowdaysTrackingService().assignBraceletToParticipant(
-                        assignee.getId(), idString
-                ).enqueue(new AssignBraceletResponseCallback());
-            }
-        }
-    }
-
-    private NfcAdapter ensureNfcAdapter() {
-        if (mNfcAdapter == null) {
-            mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        }
-        return mNfcAdapter;
     }
 
     private static SDApiService getSnowdaysApiService() {
@@ -161,33 +193,33 @@ public class ListParticipantsActivity extends AppCompatActivity
         return SDRestApi.getSDTrackingService();
     }
 
-    private class AllParticipantsListResponseCallback implements Callback<List<Participant>> {
+    private class AllPartyBeastsResponseCallback implements Callback<List<PartyBeast>> {
         @Override
-        public void onResponse(@NonNull Call<List<Participant>> call, @NonNull Response<List<Participant>> response) {
+        public void onResponse(@NonNull Call<List<PartyBeast>> call, @NonNull Response<List<PartyBeast>> response) {
             stopLoading();
             if (response.isSuccessful()) {
                 mListView.setLayoutManager(new LinearLayoutManager(
-                        ListParticipantsActivity.this,
-                            LinearLayoutManager.VERTICAL, false));
-                adapter = new ParticipantsListAdapter(response.body());
-                adapter.setSelectedListener(participant -> {
-                    if ("assign".equals(getIntent().getStringExtra("mode"))) {
-                        buildBraceletConfirmationDialog(participant,
-                                getIntent().getStringExtra("uid")).show();
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL, false));
+                adapter = new PartyBeastsListAdapter(response.body());
+                adapter.setSelectedListener(partyBeast -> {
+                    if ("assign".equals(requireActivity().getIntent().getStringExtra("mode"))) {
+                        buildBraceletConfirmationDialog(partyBeast,
+                                requireActivity().getIntent().getStringExtra("uid")).show();
                     } else {
-                        startActivity(new Intent(ListParticipantsActivity.this,
-                                ParticipantDetailActivity.class)
-                                    .putExtra("participant", participant));
+                        startActivity(new Intent(requireContext(),
+                                PartyBeastDetailActivity.class)
+                                    .putExtra("party_beast", partyBeast));
                     }
                 });
                 mListView.setAdapter(adapter);
 
             } else if (response.code() == 401) {
                 SDRestApi.refreshTokenAndReplicate(accessToken -> {
-                    Prefs.put(ListParticipantsActivity.this, SDApp.Constants.Prefs.SESSION, accessToken);
+                    Prefs.put(requireContext(), SDApp.Constants.Prefs.SESSION, accessToken);
                     SDRestApi.setAccessToken(accessToken);
                     call.clone().enqueue(this);
-                }, exception -> startActivity(new Intent(ListParticipantsActivity.this, LoginActivity.class)));
+                }, exception -> startActivity(new Intent(requireContext(), LoginActivity.class)));
             } else {
                 Snacks.normal(mSnackbarContainer, getString(R.string.error_failed_loading),
                         getString(R.string.error_failed_loading_retry), v -> onRefresh());
@@ -195,7 +227,7 @@ public class ListParticipantsActivity extends AppCompatActivity
         }
 
         @Override
-        public void onFailure(@NonNull Call<List<Participant>> call, @NonNull Throwable t) {
+        public void onFailure(@NonNull Call<List<PartyBeast>> call, @NonNull Throwable t) {
             Snacks.normal(mSnackbarContainer, getString(R.string.error_failed_loading),
                     getString(R.string.error_failed_loading_retry), v -> onRefresh());
         }
@@ -207,15 +239,15 @@ public class ListParticipantsActivity extends AppCompatActivity
             stopLoading();
             Log.d("Assign", "onResponse: status code " + response.code());
             if (response.body() == null) {
-                Toast.makeText(ListParticipantsActivity.this,
+                Toast.makeText(requireContext(),
                         R.string.activity_list_participants_assign_error,
-                            Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(ListParticipantsActivity.this,
+            Toast.makeText(requireContext(),
                     response.body().getStatus(), Toast.LENGTH_SHORT).show();
             if (response.isSuccessful()) {
-                finish();
+                requireActivity().finish();
             }
         }
 
@@ -223,9 +255,10 @@ public class ListParticipantsActivity extends AppCompatActivity
         public void onFailure(@NonNull Call<RestResponse> call, @NonNull Throwable t) {
             Log.d("Assign", "onFailure", t);
             stopLoading();
-            Toast.makeText(ListParticipantsActivity.this,
+            Toast.makeText(requireContext(),
                     R.string.activity_list_participants_assign_error,
-                        Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         }
     }
+
 }

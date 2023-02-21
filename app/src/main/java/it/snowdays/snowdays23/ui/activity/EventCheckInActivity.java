@@ -170,6 +170,9 @@ public class EventCheckInActivity extends AppCompatActivity implements SwipeRefr
     }
 
     private void animateCheckInOutcome(String animationAsset) {
+        infoContainer.animate().cancel();
+        statusAnimationView.cancelAnimation();
+        statusContainer.animate().cancel();
         infoContainer.animate().alpha(0.f)
                 .setInterpolator(new LinearInterpolator())
                 .withEndAction(() -> {

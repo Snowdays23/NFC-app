@@ -16,7 +16,8 @@
             android:id="@+id/toolbar"
             app:title="@string/activity_participant_detail_title"
             app:titleTextColor="@color/white"
-            app:navigationIcon="@drawable/ic_arrow_back"/>
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:menu="@menu/toolbar_activity_participant_detail"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,224 +36,654 @@
                 android:layout_height="64dp"
                 android:layout_gravity="center"
                 android:layout_margin="32dp"
+                android:id="@+id/activity_participant_detail_icon"
                 android:src="@drawable/ic_account_badge"
                 android:contentDescription="@string/cd_activity_participant_detail_badge"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/activity_participant_detail_first_name"
-                    android:textColor="?android:textColorTertiary"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="128dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_participant_detail_first_name"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:textAlignment="viewEnd"
-                    android:maxEms="32"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/activity_participant_detail_last_name"
-                    android:textColor="?android:textColorTertiary"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="128dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_participant_detail_last_name"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:textAlignment="viewEnd"
-                    android:maxEms="32"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/activity_participant_detail_dob"
-                    android:textColor="?android:textColorTertiary"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="128dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_participant_detail_dob"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:textAlignment="viewEnd"
-                    android:maxEms="32"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/activity_participant_detail_university"
-                    android:textColor="?android:textColorTertiary"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="128dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_participant_detail_university"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:textAlignment="viewEnd"
-                    android:maxEms="32"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/activity_participant_detail_bracelet_id"
-                    android:textColor="?android:textColorTertiary"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="128dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_participant_detail_bracelet_id"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:textAlignment="viewEnd"
-                    android:maxEms="32"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/activity_participant_detail_eating_habits"
-                    android:textColor="?android:textColorTertiary"
-                    android:textSize="16sp"/>
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:id="@+id/activity_participant_detail_all_info">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="21dp"
-                        android:layout_height="21dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:padding="2dp"
-                        android:visibility="gone"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:id="@+id/activity_participant_detail_gluten_free"
-                        android:src="@drawable/ic_gluten_free"
-                        android:contentDescription="@string/cd_activity_participant_detail_gluten_free"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_first_name"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
 
-                    <ImageView
-                        android:layout_width="21dp"
-                        android:layout_height="21dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:padding="2dp"
-                        android:visibility="gone"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:id="@+id/activity_participant_detail_lactose_free"
-                        android:src="@drawable/ic_lactose_free"
-                        android:contentDescription="@string/cd_activity_participant_detail_lactose_free"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_first_name"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
-                    <ImageView
-                        android:layout_width="21dp"
-                        android:layout_height="21dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:padding="2dp"
-                        android:visibility="gone"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:id="@+id/activity_participant_detail_vegetarian"
-                        android:src="@drawable/ic_vegetarian"
-                        android:contentDescription="@string/cd_activity_participant_detail_vegetarian"/>
+                </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="21dp"
-                        android:layout_height="21dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:padding="2dp"
-                        android:visibility="gone"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:id="@+id/activity_participant_detail_vegan"
-                        android:src="@drawable/ic_vegan"
-                        android:contentDescription="@string/cd_activity_participant_detail_vegan"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_last_name"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_last_name"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_dob"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_dob"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_email"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_email"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_phone"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_phone"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_university"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_university"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_bracelet_id"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_bracelet_id"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_selected_sport"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/activity_participant_detail_selected_sport"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textAlignment="viewEnd"
+                        android:maxEms="32"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/activity_participant_detail_rental_data_wrapper"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_rentals"
+                            android:textColor="?android:textColorTertiary"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/activity_participant_detail_rentals"
+                            android:textColor="?android:textColorPrimary"
+                            android:textSize="16sp"
+                            android:textAlignment="viewEnd"
+                            android:ellipsize="end"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_height"
+                            android:textColor="?android:textColorTertiary"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/activity_participant_detail_height"
+                            android:textColor="?android:textColorPrimary"
+                            android:textSize="16sp"
+                            android:textAlignment="viewEnd"
+                            android:maxEms="32"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_weight"
+                            android:textColor="?android:textColorTertiary"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/activity_participant_detail_weight"
+                            android:textColor="?android:textColorPrimary"
+                            android:textSize="16sp"
+                            android:textAlignment="viewEnd"
+                            android:maxEms="32"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/activity_participant_detail_shoe_size"
+                            android:textColor="?android:textColorTertiary"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/activity_participant_detail_shoe_size"
+                            android:textColor="?android:textColorPrimary"
+                            android:textSize="16sp"
+                            android:textAlignment="viewEnd"
+                            android:maxEms="32"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_head_size"
+                            android:textColor="?android:textColorTertiary"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/activity_participant_detail_head_size"
+                            android:textColor="?android:textColorPrimary"
+                            android:textSize="16sp"
+                            android:textAlignment="viewEnd"
+                            android:maxEms="32"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_participant_detail_eating_habits"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="16sp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:padding="2dp"
+                            android:visibility="gone"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:id="@+id/activity_participant_detail_gluten_free"
+                            android:src="@drawable/ic_gluten_free"
+                            android:contentDescription="@string/cd_activity_participant_detail_gluten_free"/>
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:padding="2dp"
+                            android:visibility="gone"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:id="@+id/activity_participant_detail_lactose_free"
+                            android:src="@drawable/ic_lactose_free"
+                            android:contentDescription="@string/cd_activity_participant_detail_lactose_free"/>
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:padding="2dp"
+                            android:visibility="gone"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:id="@+id/activity_participant_detail_vegetarian"
+                            android:src="@drawable/ic_vegetarian"
+                            android:contentDescription="@string/cd_activity_participant_detail_vegetarian"/>
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:padding="2dp"
+                            android:visibility="gone"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:id="@+id/activity_participant_detail_vegan"
+                            android:src="@drawable/ic_vegan"
+                            android:contentDescription="@string/cd_activity_participant_detail_vegan"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:id="@+id/activity_participant_detail_catering">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/activity_participant_detail_catering_needs_label"
+                    android:textColor="@android:color/tertiary_text_dark"
+                    android:textStyle="bold"
+                    android:textSize="13.6sp"
+                    android:textAllCaps="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/activity_participant_detail_catering_no_needs"
+                    android:text="@string/activity_participant_detail_catering_no_needs"
+                    android:textColor="@color/blue_500"
+                    android:textSize="17.6sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/activity_participant_detail_catering_line1"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:id="@+id/activity_participant_detail_catering_vegetarian"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="32dp"
+                            android:src="@drawable/ic_vegetarian"
+                            android:contentDescription="@string/cd_activity_participant_detail_vegetarian"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_vegetarian"
+                            android:textColor="@color/blue_500"
+                            android:textSize="19.2sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:id="@+id/activity_participant_detail_catering_vegan"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="32dp"
+                            android:src="@drawable/ic_vegan"
+                            android:contentDescription="@string/cd_activity_participant_detail_vegan"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_vegan"
+                            android:textColor="@color/blue_500"
+                            android:textSize="19.2sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/activity_participant_detail_catering_line2"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:id="@+id/activity_participant_detail_catering_gluten_intolerant"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="32dp"
+                            android:src="@drawable/ic_gluten_free"
+                            android:contentDescription="@string/cd_activity_participant_detail_gluten_free"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_gluten_free"
+                            android:textColor="@color/blue_500"
+                            android:textSize="19.2sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:id="@+id/activity_participant_detail_catering_lactose_intolerant"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="61dp"
+                            android:layout_height="61dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="32dp"
+                            android:src="@drawable/ic_lactose_free"
+                            android:contentDescription="@string/cd_activity_participant_detail_lactose_free"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_participant_detail_catering_lactose_intolerant"
+                            android:textColor="@color/blue_500"
+                            android:textSize="19.2sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/activity_participant_detail_catering_additional_notes_label"
+                    android:textColor="@android:color/tertiary_text_dark"
+                    android:textSize="13.6sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/activity_participant_detail_catering_additional_needs"
+                    android:text="@string/activity_participant_detail_catering_no_additional_needs"
+                    android:textColor="@color/blue_500"
+                    android:textSize="17.6sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="92dp"/>
 
         </LinearLayout>
 

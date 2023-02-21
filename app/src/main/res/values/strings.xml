@@ -65,5 +65,33 @@
     <string name="activity_event_check_in_invalid_response">Invalid response, please retry</string>
     <string name="activity_event_check_in_failed_request">Could not complete the request, please retry</string>
     <string name="participants_search">Search</string>
+    <string name="activity_list_people_tab_participants">Participants</string>
+    <string name="activity_list_people_tab_party_beasts">Party beasts</string>
+    <string name="activity_party_beast_detail_title">Party beast detail</string>
+    <string name="activity_participant_detail_phone">Phone</string>
+    <string name="activity_party_beast_detail_phone">Phone</string>
+    <string name="activity_party_beast_detail_email">Email</string>
+    <string name="activity_participant_detail_email">Email</string>
+    <string name="activity_participant_detail_rentals">Rentals</string>
+    <string name="activity_participant_detail_height">Height</string>
+    <string name="activity_participant_detail_weight">Weight</string>
+    <string name="activity_participant_detail_shoe_size">Shoe size</string>
+    <string name="activity_participant_detail_head_size">Helmet size</string>
+    <string name="activity_participant_detail_selected_sport">Sport</string>
+    <string name="activity_participant_detail_no_sport">None</string>
+    <string name="activity_participant_detail_height_value">%d cm</string>
+    <string name="activity_participant_detail_weight_value">%d kg</string>
+    <string name="activity_participant_detail_vegetarian">Vegetarian</string>
+    <string name="activity_participant_detail_vegan">Vegan</string>
+    <string name="activity_participant_detail_gluten_free">Gluten intolerant</string>
+    <string name="activity_participant_detail_catering_lactose_intolerant">Lactose intolerant</string>
+    <string name="toolbar_activity_participant_detail_view_mode">Change view mode</string>
+    <string name="activity_participant_detail_catering_no_needs">No particular eating need</string>
+    <string name="activity_participant_detail_catering_needs_label">Eating needs</string>
+    <string name="activity_participant_detail_catering_additional_notes_label">Additional notes</string>
+    <string name="activity_participant_detail_catering_no_additional_needs">No additional needs</string>
+    <string name="dialog_bracelet_uid_mismatch_title">Error</string>
+    <string name="dialog_bracelet_uid_mismatch_message">First and second scan were not of the same bracelet. Please try again.</string>
+    <string name="OK">OK</string>
 
 </resources>

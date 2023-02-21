@@ -7,21 +7,18 @@ import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import it.snowdays.snowdays23.R;
 import it.snowdays.snowdays23.ui.fragments.EventsFragment;
 import it.snowdays.snowdays23.ui.fragments.NfcAwareFragment;
-import it.snowdays.snowdays23.ui.fragments.ScanParticipantFragment;
+import it.snowdays.snowdays23.ui.fragments.ScanPeopleFragment;
 import it.snowdays.snowdays23.util.platform.NfcUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.navigation_participants) {
                 getSupportFragmentManager().beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(R.id.frame, new ScanParticipantFragment())
+                        .replace(R.id.frame, new ScanPeopleFragment())
                         .commit();
             } else if (item.getItemId() == R.id.navigation_events) {
                 getSupportFragmentManager().beginTransaction()
@@ -51,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, new ScanParticipantFragment())
+                .replace(R.id.frame, new ScanPeopleFragment())
                 .commit();
     }
 

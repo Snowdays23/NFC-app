@@ -36,10 +36,13 @@
             android:noHistory="true"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".ui.activity.ListParticipantsActivity"
+            android:name=".ui.activity.ListPeopleActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.ParticipantDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.PartyBeastDetailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"

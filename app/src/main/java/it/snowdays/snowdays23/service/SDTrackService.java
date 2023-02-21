@@ -5,6 +5,7 @@ import java.util.List;
 import it.snowdays.snowdays23.model.Event;
 import it.snowdays.snowdays23.model.Participant;
 import it.snowdays.snowdays23.service.response.RestResponse;
+import it.snowdays.snowdays23.service.response.ScanParticipantOrPartyBeastResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -13,11 +14,14 @@ import retrofit2.http.Path;
 
 public interface SDTrackService {
 
-    @GET("participant/{uid}")
-    Call<Participant> getParticipantByBraceletId(@Path("uid") String braceletId);
+    @GET("people/{uid}")
+    Call<ScanParticipantOrPartyBeastResponse> getParticipantOrPartyBeastByBraceletId(@Path("uid") String braceletId);
 
     @POST("participant/{id}/{uid}")
     Call<RestResponse> assignBraceletToParticipant(@Path("id") int participantId, @Path("uid") String braceletId);
+
+    @POST("partybeast/{id}/{uid}")
+    Call<RestResponse> assignBraceletToPartyBeast(@Path("id") int partyBeastId, @Path("uid") String braceletId);
 
     @POST("events")
     Call<Event> createEvent(@Body Event event);

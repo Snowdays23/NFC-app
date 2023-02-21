@@ -13,6 +13,7 @@
         android:layout_height="32dp"
         android:layout_gravity="center_vertical"
         android:layout_margin="16dp"
+        android:id="@+id/item_participant_icon"
         android:src="@drawable/ic_account_badge"
         android:contentDescription="@string/cd_activity_participant_detail_badge"/>
 

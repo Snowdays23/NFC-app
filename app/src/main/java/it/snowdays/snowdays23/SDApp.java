@@ -8,6 +8,7 @@ public class SDApp extends Application {
         public static final class Prefs {
             public static final String SESSION = "sessionAccessToken";
             public static final String SESSION_REFRESH = "sessionRefreshToken";
+            public static final String PARTICIPANT_DETAIL_VIEW_MODE = "partDetailViewMode";
         }
     }
 

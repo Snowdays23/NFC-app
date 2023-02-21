@@ -16,14 +16,16 @@ import java.util.Locale;
 
 import it.snowdays.snowdays23.R;
 import it.snowdays.snowdays23.model.Participant;
+import it.snowdays.snowdays23.model.PartyBeast;
 import it.snowdays.snowdays23.util.ui.ViewUtils;
 
-public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsListAdapter.ViewHolder> implements SearchAwareAdapter {
+public class PartyBeastsListAdapter extends RecyclerView.Adapter<PartyBeastsListAdapter.ViewHolder> implements SearchAwareAdapter {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mFullNameView;
         final TextView mUniversityView;
         final ImageView mTagAssignationView;
+        final ImageView mIconView;
 
         private ViewHolder(View v) {
             super(v);
@@ -34,18 +36,19 @@ public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsLi
             mFullNameView = v.findViewById(R.id.item_participant_full_name);
             mUniversityView = v.findViewById(R.id.item_participant_university);
             mTagAssignationView = v.findViewById(R.id.item_participant_bracelet_assigned);
+            mIconView = v.findViewById(R.id.item_participant_icon);
         }
     }
 
-    private List<Participant> participants;
-    private List<Participant> filteredParticipants;
+    private final List<PartyBeast> partyBeasts;
+    private List<PartyBeast> filteredPartyBeasts;
     private Context context;
 
-    private OnParticipantSelectedListener mSelectedListener;
+    private OnPartyBeastSelectedListener mSelectedListener;
 
-    public ParticipantsListAdapter(final List<Participant> participants) {
-        this.participants = new ArrayList<>(participants);
-        this.filteredParticipants = new ArrayList<>(participants);
+    public PartyBeastsListAdapter(final List<PartyBeast> partyBeasts) {
+        this.partyBeasts = new ArrayList<>(partyBeasts);
+        this.filteredPartyBeasts = new ArrayList<>(partyBeasts);
     }
 
     @NonNull
@@ -57,47 +60,47 @@ public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsLi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Participant participant = filteredParticipants.get(position);
+        final PartyBeast partyBeast = filteredPartyBeasts.get(position);
         holder.mFullNameView.setText(String.format("%s %s",
-                participant.getFirstName(), participant.getLastName()));
-        holder.mUniversityView.setText(participant.getUniversity().getName());
-        if (participant.getBraceletId() != null && !participant.getBraceletId().isEmpty()) {
+                partyBeast.getFirstName(), partyBeast.getLastName()));
+        holder.mUniversityView.setText(partyBeast.getEmail());
+        holder.mIconView.setImageResource(R.drawable.ic_party);
+        if (partyBeast.getBraceletId() != null && !partyBeast.getBraceletId().isEmpty()) {
             holder.mTagAssignationView.setImageResource(R.drawable.ic_tag_assigned);
         } else {
             holder.mTagAssignationView.setImageResource(R.drawable.ic_tag_not_assigned);
         }
         holder.itemView.setOnClickListener(v -> {
             if (mSelectedListener != null) {
-                mSelectedListener.onSelect(participant);
+                mSelectedListener.onSelect(partyBeast);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return filteredParticipants.size();
+        return filteredPartyBeasts.size();
     }
 
-    public void setSelectedListener(OnParticipantSelectedListener listener) {
+    public void setSelectedListener(OnPartyBeastSelectedListener listener) {
         mSelectedListener = listener;
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setSearchQuery(String query) {
-        this.filteredParticipants = new ArrayList<>();
+        this.filteredPartyBeasts = new ArrayList<>();
         query = query.trim().toLowerCase(Locale.ROOT);
-        for (final Participant participant : this.participants) {
-            if (participant.getFirstName().toLowerCase(Locale.ROOT).contains(query) ||
-                    participant.getLastName().toLowerCase(Locale.ROOT).contains(query) ||
-                        participant.getUniversity().getName().toLowerCase(Locale.ROOT).contains(query) ||
-                            participant.getEmail().toLowerCase(Locale.ROOT).contains(query)) {
-                this.filteredParticipants.add(participant);
+        for (final PartyBeast partyBeast : this.partyBeasts) {
+            if (partyBeast.getFirstName().toLowerCase(Locale.ROOT).contains(query) ||
+                    partyBeast.getLastName().toLowerCase(Locale.ROOT).contains(query) ||
+                    partyBeast.getEmail().toLowerCase(Locale.ROOT).contains(query)) {
+                this.filteredPartyBeasts.add(partyBeast);
             }
         }
         notifyDataSetChanged();
     }
 
-    public interface OnParticipantSelectedListener {
-        void onSelect(final Participant participant);
+    public interface OnPartyBeastSelectedListener {
+        void onSelect(final PartyBeast partyBeast);
     }
 }
